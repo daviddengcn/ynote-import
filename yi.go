@@ -106,23 +106,23 @@ var gEncoding string
 var gDoReset bool
 
 func init() {
-	flag.StringVar(&gAuthor, "author", "GO-IMPORTER", 
+	flag.StringVar(&gAuthor, "author", "GO-IMPORTER",
 		"The author of imported notes.")
 	flag.StringVar(&gSource, "source", "", "The source of imported notes.")
-	flag.StringVar(&gEncoding, "enc", "utf-8", 
+	flag.StringVar(&gEncoding, "enc", "utf-8",
 		"The encoding of the input text.")
-	flag.BoolVar(&gDoReset, "reset", false, 
+	flag.BoolVar(&gDoReset, "reset", false,
 		"Reset to clean status. Forget saved access tokens.")
-	
+
 	flag.Usage = func() {
 		fmt.Fprintln(os.Stderr, "Usage of ynote-import:")
 		fmt.Fprintln(os.Stderr, "  yi [<flags>] [path] ...")
-		fmt.Fprintln(os.Stderr, 
-			"Files are imported into the default folder. Files under a " +
-			"folder are imported to the corresponding folder, created if not " +
-			"exist. Subdirectories are not imported.")
-		fmt.Fprintln(os.Stderr, "Options:")			
-    	flag.PrintDefaults()
+		fmt.Fprintln(os.Stderr,
+			"Files are imported into the default folder. Files under a "+
+				"folder are imported to the corresponding folder, created if not "+
+				"exist. Subdirectories are not imported.")
+		fmt.Fprintln(os.Stderr, "Options:")
+		flag.PrintDefaults()
 	}
 }
 
@@ -152,7 +152,7 @@ func initAfterParse() {
 			fmt.Println("Supposing input encoding:", gEncoding)
 		}
 	}
-	
+
 	if gDoReset {
 		err := accFilePath().Remove()
 		if err != nil {
