@@ -43,7 +43,6 @@ func saveAccToken(ac *ynote.Credentials) {
 }
 
 func readAccToken() *ynote.Credentials {
-
 	js, err := accFilePath().ReadFile()
 	if err != nil {
 		return nil
@@ -102,11 +101,13 @@ var gDecoder mahonia.Decoder
 var gAuthor string
 var gSource string
 var gEncoding string
+var gDoReset bool
 
 func init() {
 	flag.StringVar(&gAuthor, "author", "GO-IMPORTER", "The author of imported notes.")
 	flag.StringVar(&gSource, "source", "", "The source of imported notes.")
 	flag.StringVar(&gEncoding, "enc", "utf-8", "The encoding of the input text.")
+	flag.BoolVar(&gDoReset, "reset", false, "Reset to clean status. Forget saved access tokens.")
 }
 
 func importFile(yc *ynote.YnoteClient, nbPath string, fn villa.Path) (string, error) {
@@ -133,6 +134,13 @@ func initAfterParse() {
 			fmt.Println("Unknown encoding", gEncoding+", supposing UTF-8")
 		} else {
 			fmt.Println("Supposing input encoding:", gEncoding)
+		}
+	}
+	
+	if gDoReset {
+		err := accFilePath().Remove()
+		if err != nil {
+			fmt.Println("Reset failed:", err)
 		}
 	}
 }
@@ -164,7 +172,7 @@ func main() {
 		case "darwin":
 			exec.Command("open", authUrl).Start()
 		case "windows":
-			exec.Command("cmd", "/c", "start", authUrl).Start()
+			exec.Command("cmd", "/d", "/c", "start", authUrl).Start()
 		case "linux":
 			exec.Command("xdg-open", authUrl).Start()
 		}
