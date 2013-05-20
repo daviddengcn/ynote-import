@@ -36,7 +36,7 @@ func saveAccToken(ac *ynote.Credentials) {
 		fmt.Println("Marshal accToken failed:", err)
 		return
 	}
-	err = accFilePath().WriteFile(js, 0)
+	err = accFilePath().WriteFile(js, 0666)
 	if err != nil {
 		fmt.Println("Write accToken failed:", err)
 	}
@@ -123,7 +123,7 @@ func importFile(yc *ynote.YnoteClient, nbPath string, fn villa.Path) (string, er
 	}
 	html := text2html(text)
 
-	return yc.CreateNote(nbPath, string(fn), gAuthor, gSource, html)
+	return yc.CreateNote(nbPath, fn.Base().S(), gAuthor, gSource, html)
 }
 
 func initAfterParse() {
