@@ -13,6 +13,7 @@ import (
 	"os"
 	"os/exec"
 	"os/user"
+	"runtime"
 	"strings"
 )
 
@@ -159,7 +160,14 @@ func main() {
 
 		authUrl := yc.AuthorizationURL(tmpCred)
 		fmt.Println(authUrl)
-		exec.Command("cmd", "/c", "start", authUrl).Start()
+		switch runtime.GOOS {
+		case "darwin":
+			exec.Command("open", authUrl).Start()
+		case "windows":
+			exec.Command("cmd", "/c", "start", authUrl).Start()
+		case "linux":
+			exec.Command("xdg-open", authUrl).Start()
+		}
 
 		fmt.Print("Please input the verifier: ")
 		verifier, err := bufio.NewReader(os.Stdin).ReadString('\n')
