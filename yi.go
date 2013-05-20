@@ -94,7 +94,9 @@ func importDir(yc *ynote.YnoteClient, nbPath, dir villa.Path) error {
 }
 
 func text2html(text string) string {
-	return strings.Replace(strings.Replace(strings.Replace(template.HTMLEscapeString(text), "\n", "<br>", -1), " ", "&nbsp;", -1), "\t", "&nbsp;&nbsp;&nbsp;&nbsp;", -1)
+	return strings.Replace(strings.Replace(strings.Replace(
+		template.HTMLEscapeString(text), "\n", "<br>", -1), " ", "&nbsp;", -1),
+		"\t", "&nbsp;&nbsp;&nbsp;&nbsp;", -1)
 }
 
 var gDecoder mahonia.Decoder
@@ -104,10 +106,24 @@ var gEncoding string
 var gDoReset bool
 
 func init() {
-	flag.StringVar(&gAuthor, "author", "GO-IMPORTER", "The author of imported notes.")
+	flag.StringVar(&gAuthor, "author", "GO-IMPORTER",
+		"The author of imported notes.")
 	flag.StringVar(&gSource, "source", "", "The source of imported notes.")
-	flag.StringVar(&gEncoding, "enc", "utf-8", "The encoding of the input text.")
-	flag.BoolVar(&gDoReset, "reset", false, "Reset to clean status. Forget saved access tokens.")
+	flag.StringVar(&gEncoding, "enc", "utf-8",
+		"The encoding of the input text.")
+	flag.BoolVar(&gDoReset, "reset", false,
+		"Reset to clean status. Forget saved access tokens.")
+
+	flag.Usage = func() {
+		fmt.Fprintln(os.Stderr, "Usage of ynote-import:")
+		fmt.Fprintln(os.Stderr, "  yi [<flags>] [path] ...")
+		fmt.Fprintln(os.Stderr,
+			"Files are imported into the default folder. Files under a "+
+				"folder are imported to the corresponding folder, created if not "+
+				"exist. Subdirectories are not imported.")
+		fmt.Fprintln(os.Stderr, "Options:")
+		flag.PrintDefaults()
+	}
 }
 
 func importFile(yc *ynote.YnoteClient, nbPath string, fn villa.Path) (string, error) {
@@ -136,7 +152,7 @@ func initAfterParse() {
 			fmt.Println("Supposing input encoding:", gEncoding)
 		}
 	}
-	
+
 	if gDoReset {
 		err := accFilePath().Remove()
 		if err != nil {
@@ -157,7 +173,8 @@ func main() {
 
 	yc.AccToken = readAccToken()
 	if yc.AccToken == nil {
-		fmt.Println("Access token (" + ac_FILENAME + ") not found, try authorize...")
+		fmt.Println("Access token (" + ac_FILENAME +
+			") not found, try authorize...")
 		fmt.Println("Requesting temporary credentials ...")
 		tmpCred, err := yc.RequestTemporaryCredentials()
 		if err != nil {
