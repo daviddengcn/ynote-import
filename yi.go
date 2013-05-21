@@ -85,7 +85,8 @@ func importDir(yc *ynote.YnoteClient, nbPath, dir villa.Path) error {
 		}
 		nPath, err := importFile(yc, nbInfo.Path, dir.Join(info.Name()))
 		if err != nil {
-			return err
+			fmt.Println("importFile failed:", err)
+			continue
 		}
 		fmt.Println("imported:", nPath)
 	}
