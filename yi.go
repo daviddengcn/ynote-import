@@ -15,6 +15,7 @@ import (
 	"os/user"
 	"runtime"
 	"strings"
+	"time"
 )
 
 const ac_FILENAME = "at.json"
@@ -89,6 +90,7 @@ func importDir(yc *ynote.YnoteClient, nbPath, dir villa.Path) error {
 			continue
 		}
 		fmt.Println("imported:", nPath)
+		time.Sleep(time.Duration(gSleepMs) * time.Millisecond)
 	}
 
 	return nil
@@ -105,6 +107,7 @@ var gAuthor string
 var gSource string
 var gEncoding string
 var gDoReset bool
+var gSleepMs int
 
 func init() {
 	flag.StringVar(&gAuthor, "author", "GO-IMPORTER",
@@ -114,6 +117,9 @@ func init() {
 		"The encoding of the input text.")
 	flag.BoolVar(&gDoReset, "reset", false,
 		"Reset to clean status. Forget saved access tokens.")
+	flag.IntVar(&gSleepMs, "sleep", 0,
+		"Milliseconds to sleep after adding a note.")
+		
 
 	flag.Usage = func() {
 		fmt.Fprintln(os.Stderr, "Usage of ynote-import:")
