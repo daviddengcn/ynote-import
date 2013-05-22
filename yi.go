@@ -61,7 +61,7 @@ func importDir(yc *ynote.YnoteClient, nbPath, dir villa.Path) error {
 	base := dir.Base()
 
 	// Find or create the notebook.
-	nbInfo, err := yc.CreateNotebook(base.S())
+	nbInfo, err := yc.CreateNotebook(base.S(), "")
 	if err != nil {
 		nbInfo, err = yc.FindNotebook(base.S())
 		if err != nil {
