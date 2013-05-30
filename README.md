@@ -3,6 +3,8 @@ ynote-import
 
 Youdao note importer.
 
+[Binary download](wiki/Binary)
+
 Run with <code>-help</code> to see usage info:
 
 ```
